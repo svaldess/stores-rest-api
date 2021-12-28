@@ -1,4 +1,6 @@
-# cd Documents/Trainings/Rest_APIs/5
+import os
+import re
+
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -12,7 +14,12 @@ from resources.store import Store, StoreList
 app = Flask(__name__)
 # tell SQLAlchemy that data.db lives at the route folder of the project
 # can be MyOrale, SQL, etc. instead of sqlite
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+# get method -> param 1 connects to heroku, param 2 connect to sqlite if we are using the app locally
+uri = os.getenv("DATABASE_URL")  # or other relevant config var
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+# rest of connection code using the connection string `uri`
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(uri,'sqlite:///data.db')
 # turn off tracking of modifications from flask. Does not tyurn off the SQLAlchemy tracker
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # add secret key for authentication
