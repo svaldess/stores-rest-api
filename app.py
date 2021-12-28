@@ -22,9 +22,9 @@ api = Api(app)
 
 # use a Flask decorator to create table before the first Request
 # Use this to substitute create_tables.py
-@app.before_first_request
-def create_tables():
-    db.create_all()
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
 
 # call jwt for authentication
 jwt = JWT(app, authenticate, identity) #/auth
